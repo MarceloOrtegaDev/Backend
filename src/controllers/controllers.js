@@ -1,6 +1,5 @@
 
 import {newConnection} from "../db/dataBase.js"
-
 export async function obtenerId(req, res){
     const conexion = await newConnection()
     const id = parseInt(req.params.id)
@@ -26,17 +25,9 @@ export async function obtenerTodo(req, res){
 export async function nuevaTask(req, res){
     const conexion = await newConnection()
     const {title, description, isComplete}= req.body
-    const regex = /^(\S+)( \S+)*$/
-    
-    if(title.length === 0 || description.length === 0){
-        res.json({msg: "Los campos no deben estar vacios."})
-    } else if (regex.test(title)){
-        const isCompleteValue = isComplete === true || isComplete === 'true' ? 1 : 0;
-        const result = await conexion.query("INSERT INTO tasks (`title`, `description`, `isComplete`) VALUES (?, ?, ?)", [title, description, isCompleteValue]);
-        res.json({msg: "Task agregada correctamente", result});
-    } else {
-        res.json({msg: "Los títulos y descripciones no deben contener caracteres especiales o espacios innecesarios."})
-    }
+    const result = await conexion.query("INSERT INTO tasks (`title`, `description`, `isComplete`) VALUES (?, ?, ?)", [title, description, isComplete]);
+        res.json({msg: "Task agregada correctamente"});
+        
     conexion.end()
 }
 
