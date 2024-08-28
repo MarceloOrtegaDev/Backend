@@ -15,8 +15,8 @@ export async function obtenerId(req, res){
 
 export async function obtenerTodo(req, res){
     const conexion = await newConnection()
-    const result = await conexion.query("SELECT * FROM tasks")
-    res.json(result[0])
+    const [result] = await conexion.query("SELECT * FROM tasks")
+    res.json(result)
     
 
     conexion.end()
@@ -25,8 +25,8 @@ export async function obtenerTodo(req, res){
 export async function nuevaTask(req, res){
     const conexion = await newConnection()
     const {title, description, isComplete}= req.body
-    const result = await conexion.query("INSERT INTO tasks (`title`, `description`, `isComplete`) VALUES (?, ?, ?)", [title, description, isComplete]);
-        res.json({msg: "Task agregada correctamente"});
+    const [result] = await conexion.query("INSERT INTO tasks (`title`, `description`, `isComplete`) VALUES (?, ?, ?)", [title, description, isComplete]);
+        res.json([result]);
         
     conexion.end()
 }
@@ -45,7 +45,7 @@ export async function editarTask(req, res){
                 if (result.affectedRows === 0) {
                     res.json({msg: "No se encontró la task con el id especificado."});
                 } else {
-                    res.json({msg: "Se editó la task correctamente.", result});
+                    res.json(result);
                 }
         } else {
             res.json({msg: "Los títulos y descripciones no deben contener caracteres especiales o espacios innecesarios."})

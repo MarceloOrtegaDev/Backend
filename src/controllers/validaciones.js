@@ -1,7 +1,9 @@
 import {body} from "express-validator"
 
 export const validarTask = [
-    body("title").notEmpty().withMessage("El título no debe estar vacio")
+    body("title").notEmpty({
+        max: 10,
+    }).withMessage("El título no debe estar vacio")
     .isString().withMessage("El título no debe contener numeros"),
 
 
